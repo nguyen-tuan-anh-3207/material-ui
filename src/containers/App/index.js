@@ -7,8 +7,6 @@ import styles from './style';
  
 class App extends Component {
   render() { 
-    var {classes} = this.props;
-    console.log(this.props);
     return (
       <ThemeProvider theme = {theme}>
         <TaskBoard/>
