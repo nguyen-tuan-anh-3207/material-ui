@@ -1,0 +1,22 @@
+{
+    "tasks": [
+        {
+            "id" : 1,
+            "title": "Read Book",
+            "description": "learning react js",
+            "status": 0
+        },
+        {
+            "id" : 2,
+            "title": "Play game",
+            "description": "decmacia",
+            "status": 1
+        },
+        {
+            "id" : 3,
+            "title": "Read java",
+            "description": "learning  spring",
+            "status": 2
+        }
+    ]
+}
