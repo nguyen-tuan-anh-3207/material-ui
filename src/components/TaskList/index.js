@@ -7,7 +7,7 @@ import styles from './styles';
 export class TaskList extends Component {
     render() {
         const {classes, tasks, status} =this.props;
-        console.log(classes);
+        // console.log(classes);
         return (
             <Grid item md={4} xs={12} key={status.value}>
               <Box mt={2} mb={2}><div>{status.label}</div></Box>

@@ -16,7 +16,7 @@ import styles from "./styles";
 class TaskItem extends Component {
   render() {
     const { classes, task, status } = this.props;
-    console.log(classes);
+    // console.log(classes);
     const { id, title } = task;
     return (
       <Card key={id}>

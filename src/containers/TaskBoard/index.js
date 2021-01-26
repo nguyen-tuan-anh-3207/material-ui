@@ -7,32 +7,22 @@ import TaskForm from "../../components/TaskForm";
 import { TaskList } from "../../components/TaskList";
 import { STATUSES } from "../../constants";
 import styles from "./styles";
-
-const listTasks = [
-  {
-    id: 1,
-    title: "Read book",
-    desription: "read matreial ui book",
-    status: 0,
-  },
-  {
-    id: 2,
-    title: "play football",
-    desription: "with my friends",
-    status: 2,
-  },
-  {
-    id: 3,
-    title: "play game",
-    desription: "with my children",
-    status: 1,
-  },
-];
+import { connect } from "react-redux";
+import {bindActionCreators} from 'redux';
+import * as taskActions from './../../actions/task';
+import PropTypes from 'prop-types';
 
 class TaskBoard extends Component {
   state = {
     open: false,
   };
+
+  componentDidMount(){
+    const {taskActions} = this.props;
+    const {fetchListTaskRequest} = taskActions;
+    fetchListTaskRequest();
+  }
+
   handleClose = () => {
     this.setState({
       open: false,
@@ -48,13 +38,12 @@ class TaskBoard extends Component {
   renderForm = () => {
     var { open } = this.state;
     var xhtml = null;
-    xhtml = (
-        <TaskForm handleClose={this.handleClose} open = {open}/>
-    );
+    xhtml = <TaskForm handleClose={this.handleClose} open={open} />;
     return xhtml;
   };
 
   renderBoard = () => {
+    const {listTasks} = this.props;
     let xhtml = null;
     xhtml = (
       <Grid container spacing={2}>
@@ -86,6 +75,33 @@ class TaskBoard extends Component {
       </div>
     );
   }
+
+
 }
 
-export default withStyles(styles)(TaskBoard);
+TaskBoard.propsTypes = {
+      classes: PropTypes.object,
+      taskActions: PropTypes.shape({
+        fetchListTask : PropTypes.func,
+      }),
+      listTasks: PropTypes.array,
+
+};
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    listTasks: state.task.listTask,
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    taskActions: bindActionCreators(taskActions, dispatch)
+  };
+};
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(TaskBoard)
+);
+
+
