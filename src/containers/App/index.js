@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GlobalLoading from "../../components/GlobalLoading";
+import CommonModal from "../../components/CommonModal";
 import TaskBoard from "../TaskBoard";
 import theme from "./../../commons/themes";
 import configureStore from "./../../redux/configureStore";
@@ -19,6 +20,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <ToastContainer />
           <GlobalLoading/>
+          <CommonModal/>
           <TaskBoard />
         </ThemeProvider>
       </Provider>

@@ -7,10 +7,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { bindActionCreators } from "redux";
-import TaskForm from "../../components/TaskForm";
+import SearchBox from "../../components/SearchBox";
+import TaskForm from "../TaskForm";
 import { TaskList } from "../../components/TaskList";
 import { STATUSES } from "../../constants";
 import * as taskAction from "./../../actions/task";
+import * as modalActions from "./../../actions/modal";
 import styles from "./styles";
 
 class TaskBoard extends Component {
@@ -18,11 +20,11 @@ class TaskBoard extends Component {
     open: false,
   };
 
-  // componentDidMount() {
-  //   const { taskActions } = this.props;
-  //   const { fetchListTask } = taskActions;
-  //   fetchListTask();
-  // }
+  componentDidMount() {
+    const { taskActions } = this.props;
+    const { fetchListTask } = taskActions;
+    fetchListTask();
+  }
 
   handleClose = () => {
     this.setState({
@@ -31,17 +33,19 @@ class TaskBoard extends Component {
   };
 
   openForm = () => {
-    this.setState({
-      open: true,
-    });
+    const {modalActions} = this.props;
+    const {showModal, changeModalContent, changeModalTitle} = modalActions;
+    showModal();
+    changeModalTitle('Thêm mới công việc');
+    changeModalContent(<TaskForm/>);
   };
 
-  renderForm = () => {
-    var { open } = this.state;
-    var xhtml = null;
-    xhtml = <TaskForm handleClose={this.handleClose} open={open} />;
-    return xhtml;
-  };
+  // renderForm = () => {
+  //   var { open } = this.state;
+  //   var xhtml = null;
+  //   xhtml = <TaskForm handleClose={this.handleClose} open={open} />;
+  //   return xhtml;
+  // };
 
   renderBoard = () => {
     const { listTasks } = this.props;
@@ -64,6 +68,21 @@ class TaskBoard extends Component {
     const { fetchListTask } = taskActions;
     fetchListTask();
   };
+
+  handleFilter = (e)=> {
+   const {value} = e.target;
+   const { taskActions } = this.props;
+    const { filterTask } = taskActions;
+    filterTask(value);
+  };
+
+  renderSearchBox = ()=> {
+    let xhtml = null;
+    xhtml = (
+      <SearchBox handleChange = {this.handleFilter}/>
+    );
+    return xhtml;
+  }
 
   render() {
     const { classes } = this.props;
@@ -88,8 +107,8 @@ class TaskBoard extends Component {
           <AddIcon />
           Thêm mới công việc
         </Button>
+        {this.renderSearchBox()}
         {this.renderBoard()}
-        {this.renderForm()}
       </div>
     );
   }
@@ -101,6 +120,12 @@ TaskBoard.propsTypes = {
     fetchListTask: PropTypes.func,
   }),
   listTasks: PropTypes.array,
+  modalActions : PropTypes.shape({
+    showModal: PropTypes.func,
+    hideModal : PropTypes.func,
+    changeModalTitle: PropTypes.func,
+    changeModalContent: PropTypes.func, 
+  }),
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -112,6 +137,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     taskActions: bindActionCreators(taskAction, dispatch),
+    modalActions: bindActionCreators(modalActions, dispatch),
   };
 };
 
